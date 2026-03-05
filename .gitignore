@@ -1,0 +1,12 @@
+__pycache__
+.*
+**/completed/**
+**/migrated/**
+**/data/guild_icons/**
+**/data/avatars/**
+**/data/media/**
+**/data/database.db
+
+
+!.gitkeep
+!.gitignore
