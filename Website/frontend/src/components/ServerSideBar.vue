@@ -2,6 +2,7 @@
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { api_url } from '../constants';
 
 const router = useRouter()
 
@@ -18,13 +19,14 @@ onMounted(async() => {
         <div class="direct-messages">
             <img
                 class="server-image"
-                :src = "`http://localhost:8000/data/guild_icons/0.png`"
+                :src = "`${api_url}/data/guild_icons/0.png`"
                 @click="router.push('/channels/@me')"/>
         </div>
-        <div v-for="server in servers" :key="server.id">
+        <div v-for="server in servers" :key="server.id"
+            class="server-container">
             <img 
                 class="server-image" 
-                :src="`http://localhost:8000/data/guild_icons/${server.image}`"
+                :src="`${api_url}/data/guild_icons/${server.image}`"
                 @click="router.push(`/server/${server.id}/${server.first_channel}`)"
             />
         </div>
@@ -42,9 +44,28 @@ onMounted(async() => {
     min-width: 75px;
 }
 
+.server-container{
+    display: flex;
+    position: relative;
+}
+
 .server-image{
     height: 50px;
     border-radius: 30px;
     padding: 10px;
 }
+
+.server-image:hover{
+    border-radius: 20px;
+}
+
+.server-container:hover::before{
+    align-self: center;
+    position: absolute;
+    content: "";
+    padding: 10px 2px;
+    border-radius: 10px;
+    background-color: white;
+}
+
 </style>

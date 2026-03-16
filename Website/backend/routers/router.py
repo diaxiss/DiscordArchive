@@ -1,5 +1,7 @@
-from fastapi import APIRouter
+import json
 import sqlite3
+
+from fastapi import APIRouter
 
 router = APIRouter()
 
@@ -120,7 +122,7 @@ def get_members(id:str):
 
 
 @router.get('/channel/{id}')
-def get_channel_messages(id: str):
+def get_channel_messages(id: str, offset: int = 0):
     con = sqlite3.connect('./data/database.db')
     cur = con.cursor()
 
@@ -143,10 +145,10 @@ def get_channel_messages(id: str):
         JOIN users u
             ON m.author_id = u.id
         WHERE m.channel_id = ?
-        ORDER BY m.created_at ASC
-        LIMIT 1000
-        OFFSET 0
-    ''', [id]).fetchall()
+        ORDER BY m.created_at DESC
+        LIMIT 20
+        OFFSET ?
+    ''', [id, offset]).fetchall()
 
     result = []
     for row in messages:
@@ -159,9 +161,13 @@ def get_channel_messages(id: str):
         ''', [message_id]).fetchall()
 
         reactions = cur.execute('''
-            SELECT user_id, emoji
+            SELECT
+                emoji,
+                json_group_array(users.global_display_name) AS users
             FROM reactions
+            LEFT JOIN users ON user_id = users.id
             WHERE message_id = ?
+            GROUP BY emoji
         ''', [message_id]).fetchall()
 
         mentions = cur.execute('''
@@ -177,6 +183,7 @@ def get_channel_messages(id: str):
         ''', [message_id]).fetchall()
 
         result.append({
+            'id': row[0],
             'author':{
                 'id': row[1],
                 'name': row[2],
@@ -198,8 +205,8 @@ def get_channel_messages(id: str):
             } for a in attachments],
 
             'reactions': [{
-                'user_id': r[0],
-                'emoji': r[1]
+                'emoji': r[0],
+                'users': json.loads(r[1])
             } for r in reactions],
 
             'mentions': [{
@@ -211,5 +218,4 @@ def get_channel_messages(id: str):
             } for e in embeds]
 
         })
-    
     return {'messages': result}

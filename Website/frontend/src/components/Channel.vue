@@ -2,14 +2,24 @@
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
 import FullscreenImage from '../components/FullscreenImage.vue';
+import Attachment from './Attachment.vue';
+import Embed from './Embed.vue';
+
+import type { Message } from '../interfaces';
+import Reactions from './Reactions.vue';
+import { api_url } from '../constants';
 
 const props = defineProps<{
   channel: String
 }>()
 
-
-const messages = ref<any[]>([]);
+const messages = ref<Message[]>([]);
 const fullscreenImage = ref<string>('');
+
+const offset = ref<number>(0);
+const loading = ref<boolean>(false);
+const allLoaded = ref<boolean>(false);
+const container = ref<HTMLElement | null>(null)
 
 function formatDate(date: Date){
   let string = date.toLocaleString('en-GB', {
@@ -23,20 +33,39 @@ function formatDate(date: Date){
   return string
 }
 
-function enableAutoplay(event: MouseEvent){
-  const el = event.currentTarget as HTMLVideoElement
-  el.play()
+function checkScrollEnd(){
+  if(!container.value){
+    return
+  }
+
+  if(-container.value?.scrollTop + container.value?.clientHeight >= container.value?.scrollHeight - 2){
+    loadMoreMessages()
+  }
 }
 
-function disableAutoplay(event: MouseEvent){
-  const el = event.currentTarget as HTMLVideoElement
-  el.pause()
+async function loadMoreMessages(){
+  if (loading.value || allLoaded.value){
+    return
+  }
+  offset.value += 20
+  loading.value = true
+  const newMessages = (await axios.get(`${api_url}/channel/${props.channel}?offset=${offset.value}`)).data.messages
+  if (newMessages.length === 0){
+    allLoaded.value = true
+  }
+  messages.value.push(...newMessages)
+  loading.value = false
+
+}
+
+
+function setFullscreenImage(url: string){
+  fullscreenImage.value = url
 }
 
 
 onMounted(async() => {
-  messages.value = (await axios.get(`http://localhost:8000/channel/${props.channel}`)).data.messages
-  console.log(messages.value)
+  messages.value = (await axios.get(`${api_url}/channel/${props.channel}`)).data.messages
 })
 
 </script>
@@ -44,19 +73,21 @@ onMounted(async() => {
 <template>
 
   <FullscreenImage
-    :image="fullscreenImage"
+    :source="fullscreenImage"
     @close="fullscreenImage = ''"
   />
 
   <ol
-    class="messages-container" 
-    :class="{'no-scroll': fullscreenImage}">
+    class="messages-container"
+    ref="container"
+    :class="{'no-scroll': fullscreenImage}"
+    @scrollend="checkScrollEnd">
 
     <li v-for="message in messages" :key="message.id" class="message">
 
       <div class="left">
         <img 
-          :src="`http://localhost:8000/data/avatars/${message.author.avatar_url}`"
+          :src="`${api_url}/data/avatars/${message.author.avatar_url}`"
           style="height: 50px; width: 50px; border-radius: 50px;"/>
       </div>
       
@@ -69,47 +100,27 @@ onMounted(async() => {
 
         <div>
           <pre class="message-content">{{ message.content }}</pre>
+
           <div v-for="embed in message.embeds">
-            <video
-              v-if="!embed.url.includes('youtube.com')"
-              loop autoplay muted playsinline
-              preload="none"
-              @mouseenter="enableAutoplay"
-              @mouseleave="disableAutoplay">
-                <source :src="embed.url"/>
-            </video>
-            <iframe
-                v-else
-                class="yt-embed-iframe"
-                :src="embed.url"
-                frameborder="0"
-                allow="autoplay; fullscreen"
-                scrolling="no"
-                loading="lazy">
-            </iframe>  
+            <Embed
+              :embed="embed"
+              @zoom="setFullscreenImage"
+            />  
           </div>
 
           <div v-for="attachment in message['attachments']">
 
-            <img
-              v-if="['png', 'jpg', 'jpeg', 'gif', 'apng', 'gifv', 'webm'].includes(attachment.url.split('.').pop().toLowerCase())"
-              loading="lazy"
-              :src="`http://localhost:8000/data/media/${attachment.url}`"
-              @click="fullscreenImage = attachment.url"/>
-
-            <video
-              v-if="['mp4'].includes(attachment.url.split('.').pop().toLowerCase())"
-              controls>
-              <source :src="attachment.url"/>
-            </video>
-
-            <audio
-              v-if="['ogg', 'mp3', 'wav'].includes(attachment.url.split('.').pop().toLowerCase())"
-              controls>
-              <source :src="attachment.url"/>
-            </audio>
+            <Attachment
+              :attachment="attachment"
+              @zoom="setFullscreenImage"
+              />
 
           </div>
+
+          <Reactions
+            v-if="message.reactions.length > 0"
+            :reactions="message.reactions"
+          />
 
         </div>
       </div>
@@ -119,25 +130,10 @@ onMounted(async() => {
 </template>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
-
-*{
-  margin: 0px;
-  padding: 0px;
-  color: #E4E4E6;
-  font-family: "Roboto", sans-serif;
-}
-
-body, html, #app{
-  height: 100%;
-}
-
-body{
-  background-color: #070709;
-  overflow: hidden;
-}
 
 .messages-container{
+  display: flex;
+  flex-direction: column-reverse;
   height: 100%;
   width: 100%;
   overflow-y: scroll;
@@ -145,6 +141,10 @@ body{
 
 .messages-container.no-scroll{
   overflow: hidden;
+}
+
+.right{
+  max-width: 100%;
 }
 
 .message{
@@ -182,33 +182,15 @@ body{
 }
 
 .message-content{
-  color: #DCDCDF
+  color: #DCDCDF;
+  font-size: medium;
+  white-space: pre-wrap;
 }
 
 .yt-embed-iframe{
     min-width: 500px;
     max-width: 600px;
     aspect-ratio: 16/9;
-}
-
-iframe{
-  border-radius: 10px;
-}
-
-video{
-  max-height: 300px;
-  border-radius: 10px;
-}
-
-audio{
-  max-height: 100px;
-  border-radius: 10px;
-}
-
-img{
-  max-height: 400px;
-  max-width: 400px;
-  border-radius: 10px;
 }
 
 </style>

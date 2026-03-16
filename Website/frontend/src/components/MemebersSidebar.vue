@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { api_url } from '../constants';
+
 
 const props = defineProps<{
     members: any[]
@@ -11,7 +13,7 @@ const props = defineProps<{
         <div class="member" v-for="member in members">
             <img 
                 class="avatar"
-                :src="`http://localhost:8000/data/avatars/${member.image}`"/>
+                :src="`${api_url}/data/avatars/${member.image}`"/>
             <p>{{ member.display_name }}</p>
         </div>
     </div>

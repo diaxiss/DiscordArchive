@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
+import { api_url } from '../constants';
 
 const router = useRouter()
 const props = defineProps<{
@@ -15,7 +16,7 @@ const props = defineProps<{
             class="dm"
             v-for="dm in dms"
             @click="router.push(`/channels/@me/${dm.id}`)">
-            <img class="user-image" :src="`http://localhost:8000/data/avatars/${dm.image}`"/>
+            <img class="user-image" :src="`${api_url}/data/avatars/${dm.image}`"/>
             <p>{{dm.name}}</p>
         </div>
     </div>
