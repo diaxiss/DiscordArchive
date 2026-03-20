@@ -34,42 +34,4 @@ console.log(props.reactions)
 
 </template>
 
-<style lang="css">
-
-.reactions-container{
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.reaction-container{
-    display: flex;
-    align-items: center;
-    background-color: #27272B;
-    color: #9D9EA5;
-    padding: 3px 6px;
-    border-radius: 5px;
-    border: 1px solid rgba(0,0,0,0);
-    font-size: 14px;
-    gap: 5px;
-}
-
-.reaction-container > p{
-    color: #9D9EA5
-}
-
-.reaction-container:hover{
-    background-color: #303034;
-    border: 1px solid #3F3F45;
-    cursor: pointer;
-}
-
-.reaction-container:hover > p{
-    color: #E4E4E6;
-}
-
-.hidden{
-    display: none;
-}
-</style>
+<style lang="css" scoped src="../styles/Reactions.css"/>

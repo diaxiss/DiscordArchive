@@ -1,11 +1,12 @@
 <script setup lang="ts">
 
+import axios from 'axios';
 import { onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
+
 import Channel from '../components/Channel.vue';
 import DirectMessageSideBar from '../components/DirectMessageSideBar.vue';
 import ServerSideBar from '../components/ServerSideBar.vue';
-import { useRoute } from 'vue-router';
-import axios from 'axios';
 
 const route = useRoute()
 const dms = ref<any[]>([]);
@@ -28,9 +29,4 @@ onMounted(async() => {
     </div>
 </template>
 
-<style>
-.page-container{
-    display: flex;
-    height: 100%;
-}
-</style>
+<style lang="css" scoped src="../styles/Home.css"/>

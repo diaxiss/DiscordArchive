@@ -56,27 +56,4 @@ function toggleZoom(event: any){
     </div>
 </template>
 
-<style scoped>
-.fullscreen-image-container{
-    display: flex;
-    position: fixed;
-    top: 0;
-    width: 100vw;
-    height: 100vh;
-    justify-content: center;
-    align-items: center;
-    overflow: scroll;
-    z-index: 9999;
-    background-color: #000000AA;
-}
-
-.fullscreen-item{
-    max-width: 90%;
-    max-height: 90%;
-}
-
-.fullscreen-item:hover{
-    cursor: zoom-in
-}
-
-</style>
+<style lang="css" scoped src="../styles/FullscreenImage.css"/>

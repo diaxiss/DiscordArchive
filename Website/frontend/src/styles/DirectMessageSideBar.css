@@ -1,0 +1,36 @@
+
+.dm-sidebar{
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    min-width: 10rem;
+    max-width: 15rem;
+    overflow: scroll;
+    border: 1px solid #1E1E20;
+    background-color: #000000;
+}
+
+.dm{
+    display: flex;
+    width: 100%;
+    margin: 0.75rem;
+    border-radius: 0.75rem;
+    align-items: center;
+}
+
+.dm:hover{
+    background-color: #121213;
+}
+
+.dm > p{
+    width: 100%;
+    white-space: "none";
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+}
+
+.user-image{
+    height: 2.5rem;
+    border-radius: 2.5rem;
+    padding: 0.25rem;
+}

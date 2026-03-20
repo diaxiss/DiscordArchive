@@ -1,0 +1,23 @@
+
+.reaction-details{
+    position:absolute;
+    bottom: 100%;
+    display: flex;
+    background-color: #131416;
+    border-radius: 0.25rem;
+    border: 1px solid #242426;
+    align-items: center;
+    width: fit-content;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.right > p{
+    max-width: 75vw;
+    padding: 0.5rem;
+}
+
+.left:first-child{
+    height: 100%;
+    padding: 1rem;
+}

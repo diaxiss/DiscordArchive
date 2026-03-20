@@ -1,0 +1,36 @@
+
+.reactions-container{
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.reaction-container{
+    display: flex;
+    align-items: center;
+    background-color: #27272B;
+    color: #9D9EA5;
+    padding: 0.1rem 0.2rem;
+    border-radius: 0.25rem;
+    border: 1px solid rgba(0,0,0,0);
+    gap: 0.25rem;
+}
+
+.reaction-container > p{
+    color: #9D9EA5
+}
+
+.reaction-container:hover{
+    background-color: #303034;
+    border: 1px solid #3F3F45;
+    cursor: pointer;
+}
+
+.reaction-container:hover > p{
+    color: #E4E4E6;
+}
+
+.hidden{
+    display: none;
+}

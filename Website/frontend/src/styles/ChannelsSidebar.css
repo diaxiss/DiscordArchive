@@ -1,0 +1,70 @@
+
+.channels-sidebar{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5px;
+    position: sticky;
+    top: 0;
+    overflow-y: auto;
+    background-color: #000000;
+    border: 1px solid #1E1E20;
+    height: 100%;
+    min-width: 10rem;
+    max-width: 15rem;
+}
+
+.channels-sidebar::after{
+    padding: 2rem;
+    border: 4px solid white;
+}
+
+.channel-container{
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    max-height: 4rem;
+    width: 100%;
+    border-radius: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    text-decoration: none;
+}
+
+.name-container{
+    display: flex;
+    gap: 0.75rem;
+    width: 100%;
+    align-items: center;
+}
+
+.name-container p{
+    color: #7A7B83
+}
+
+.channel-icon{
+    font-size: 1.5rem;
+}
+
+.channel-name{
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.router-link-active{
+    background-color: #242426;
+    color: #E2E2E4;
+}
+
+.router-link-active p{
+    color: #E2E2E4;
+}
+
+.channel-container:hover:not(.router-link-active){
+    background-color: #121213;
+}
+
+.channel-container:hover:not(.router-link-active) p{
+    color: #E4E4E6;
+}

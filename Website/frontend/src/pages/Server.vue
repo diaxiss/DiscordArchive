@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import axios from 'axios';
 import { onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
+
 import ServerSideBar from '../components/ServerSideBar.vue';
 import ChannelsSidebar from '../components/ChannelsSidebar.vue';
 import Channel from '../components/Channel.vue';
-import { useRoute } from 'vue-router';
 import MemebersSidebar from '../components/MemebersSidebar.vue';
 
 const channels = ref<any[]>([]);
@@ -46,5 +47,4 @@ onMounted(async() => {
     </div>
 </template>
 
-<style>
-</style>
+<style lang="css" scoped src="../styles/Server.css"/>

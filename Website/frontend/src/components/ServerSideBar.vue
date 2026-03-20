@@ -33,39 +33,4 @@ onMounted(async() => {
     </div>
 </template>
 
-<style>
-
-.server-sidebar{
-    position: sticky;
-    top: 0;
-    overflow-y: auto;
-    background-color: #000000;
-    height:100vh;
-    min-width: 75px;
-}
-
-.server-container{
-    display: flex;
-    position: relative;
-}
-
-.server-image{
-    height: 50px;
-    border-radius: 30px;
-    padding: 10px;
-}
-
-.server-image:hover{
-    border-radius: 20px;
-}
-
-.server-container:hover::before{
-    align-self: center;
-    position: absolute;
-    content: "";
-    padding: 10px 2px;
-    border-radius: 10px;
-    background-color: white;
-}
-
-</style>
+<style lang="css" scoped src="../styles/ServerSideBar.css"/>

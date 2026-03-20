@@ -42,7 +42,7 @@ const source = computed(() => {
     </audio>
 </template>
 
-<style>
+<style scoped>
 img:hover{
     cursor: pointer;
 }
