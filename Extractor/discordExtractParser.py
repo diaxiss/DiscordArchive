@@ -1,7 +1,6 @@
 import json
 import sqlite3
-import requests
-import os
+import sys
 
 from addMessagesToDB import *
 from parser import *
@@ -113,7 +112,10 @@ def extractor(path: str):
     con.close()
 
 def main():
-    extractor()
+    if len(sys.argv) < 2:
+        print("Please provide the path to the JSON file as an argument.")
+        sys.exit(1)
+    extractor(sys.argv[1])
 
 if __name__ == '__main__':
     main()

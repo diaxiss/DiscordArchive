@@ -1,5 +1,6 @@
 import os
 import requests
+from typing import Tuple
 
 def parseAttachments(messageId: int, messageAttachments: dict) -> dict:
     attachments = []
@@ -89,7 +90,7 @@ def parseUser(user: dict) -> dict:
     return {'id': id, 'name': name, 'nickname': nickname, 'avatarUrl': avatarUrl, 'isBot': isBot}
 
 
-def parseChannelCategory(json_file: dict, guild_id: str) -> tuple(dict, dict | None):
+def parseChannelCategory(json_file: dict, guild_id: str) -> Tuple[dict, dict]:
 
     channel_id = json_file['channel']['id']
     channel_name = json_file['channel']['name']
